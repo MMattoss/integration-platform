@@ -6,6 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import User from './users/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
+import { OrganizationsModule } from './organizations/organizations.module';
+import Organization from './organizations/entities/organization.entity';
+import OrganizationUser from './organizations/entities/organization-users.entity';
 
 @Module({
   imports: [
@@ -13,11 +16,16 @@ import { UsersModule } from './users/users.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DB_URL,
-      entities: [User],
+      entities: [
+        User, 
+        Organization,
+        OrganizationUser,
+      ],
       synchronize: true,
     }),
     AuthModule,
     UsersModule,
+    OrganizationsModule,
   ],
   controllers: [
     AppController
