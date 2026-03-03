@@ -61,7 +61,15 @@ export class AuthService {
     const passMatch = await bcrypt.compare(password, user.password);
     if(!passMatch) throw new UnauthorizedException("Incorrect user or password");
 
-    const payload = { sub: user.id, email: user.email };
+    const membership = user.organizationUsers[0];
+    if(!membership) throw new UnauthorizedException("User not assigned to any organization");
+    
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      organizationId: membership.organization.id
+    };
+
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

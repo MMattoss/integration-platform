@@ -25,7 +25,13 @@ export class UsersService {
   };
 
   async findOneByEmail(email: string) {
-    return await this.usersRepository.findOneBy({ email });
+    return await this.usersRepository.findOne({ 
+      where: { email },
+      relations: [
+        'organizationUsers',
+        'organizationUsers.organization',
+      ],
+    });
   }
 
   async createUser(createUserDto: CreateUserDto) {
