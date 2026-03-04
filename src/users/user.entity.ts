@@ -1,9 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import OrganizationUser from "src/organizations/entities/organization-users.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   firstName: string;
@@ -16,6 +17,9 @@ class User {
 
   @Column()
   password: string;
+
+  @OneToMany(() => OrganizationUser, (ou) => ou.user)
+  organizationUsers: OrganizationUser[];
 
   @CreateDateColumn()
   createdAt: Date;

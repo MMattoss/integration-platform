@@ -16,7 +16,7 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: string) {
     const user = await this.usersRepository.findOneBy({ id });
 
     if(!user) throw new NotFoundException("User not found");
@@ -25,7 +25,13 @@ export class UsersService {
   };
 
   async findOneByEmail(email: string) {
-    return await this.usersRepository.findOneBy({ email });
+    return await this.usersRepository.findOne({ 
+      where: { email },
+      relations: [
+        'organizationUsers',
+        'organizationUsers.organization',
+      ],
+    });
   }
 
   async createUser(createUserDto: CreateUserDto) {
@@ -35,7 +41,7 @@ export class UsersService {
     return success;
   };
 
-  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
     const { firstName, lastName, email } = updateUserDto;
 
     const user = await this.findOneById(id);
@@ -52,7 +58,7 @@ export class UsersService {
     return this.findOneById(id);
   };
 
-  deleteUser(id: number) {
+  deleteUser(id: string) {
     return this.usersRepository.delete({ id });
   };
 }
