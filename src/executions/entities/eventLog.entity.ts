@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ExecutionStep } from "./executionStep.entity";
 import { LogLevel } from "../enums/executions.enum";
 import type { LogPayload } from "../interfaces/execution.inteface";
@@ -8,16 +8,16 @@ export class EventLog {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToMany(() => ExecutionStep, (execStep) => execStep.id)
+  @ManyToOne(() => ExecutionStep, (execStep) => execStep.id)
   executionStepId: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: LogLevel })
   level: LogLevel;
 
   @Column()
   message: string;
 
-  @Column()
+  @Column({ type: 'jsonb' })
   payload: LogPayload;
 
   @CreateDateColumn()

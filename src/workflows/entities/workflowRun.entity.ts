@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Workflow } from "./workflow.entity";
 import { WorkflowStatus } from "../enums/workflow.enum";
 
@@ -7,15 +7,15 @@ export class WorkflowRun {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToMany(() => Workflow, (workflow) => workflow.id)
+  @ManyToOne(() => Workflow, (workflow) => workflow.id)
   workflowId: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: WorkflowStatus })
   status: WorkflowStatus;
 
   @CreateDateColumn()
   startedAt: Date;
 
-  @CreateDateColumn()
+  @Column()
   finishedAt: Date;
 }

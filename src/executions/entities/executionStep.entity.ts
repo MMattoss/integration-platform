@@ -1,6 +1,6 @@
 import { WorkflowRun } from "src/workflows/entities/workflowRun.entity";
 import { WorkflowStep } from "src/workflows/entities/workflowStep.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ExecutionStatus } from "../enums/executions.enum";
 import type { StepDataEnvelope } from "../interfaces/execution.inteface";
 
@@ -9,24 +9,24 @@ export class ExecutionStep {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToMany(() => WorkflowRun, (workflowRun) => workflowRun.id)
+  @ManyToOne(() => WorkflowRun, (workflowRun) => workflowRun.id)
   workflowRunId: string;
 
-  @OneToMany(() => WorkflowStep, (workflowStep) => workflowStep.id)
+  @ManyToOne(() => WorkflowStep, (workflowStep) => workflowStep.id)
   workflowStepId: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: ExecutionStatus })
   status: ExecutionStatus;
 
-  @CreateDateColumn()
+  @Column()
   startedAt: Date;
 
-  @CreateDateColumn()
+  @Column()
   finishedAt: Date;
 
-  @Column()
+  @Column({ type: 'jsonb' })
   input: StepDataEnvelope;
 
-  @Column()
+  @Column({ type: 'jsonb' })
   output: StepDataEnvelope;
 }

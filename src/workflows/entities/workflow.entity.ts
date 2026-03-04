@@ -1,5 +1,5 @@
 import Organization from "src/organizations/entities/organization.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { TriggerType, WorkflowStatus } from "../enums/workflow.enum";
 import type { TriggerConfig } from "../interfaces/workflow.inteface";
 
@@ -8,19 +8,19 @@ export class Workflow {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToMany(() => Organization, (org) => org.id)
+  @ManyToOne(() => Organization, (org) => org.id)
   organizationId: string;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: WorkflowStatus })
   status: WorkflowStatus;
 
-  @Column()
+  @Column({ type: 'enum', enum: TriggerType })
   triggerType: TriggerType;
 
-  @Column()
+  @Column({ type: 'jsonb' })
   triggerConfig: TriggerConfig;
 
   @CreateDateColumn()

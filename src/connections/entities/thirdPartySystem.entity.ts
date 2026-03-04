@@ -9,10 +9,10 @@ export class ThirdPartySystem {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: ThirdPartyType })
   type: ThirdPartyType;
 
-  @Column()
+  @Column({ type: 'enum', enum: AuthType })
   authType: AuthType;
 
   @Column()

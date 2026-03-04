@@ -1,5 +1,5 @@
 import Organization from "src/organizations/entities/organization.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ThirdPartySystem } from "./thirdPartySystem.entity";
 
 @Entity()
@@ -7,10 +7,10 @@ export class Connection {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToMany(() => Organization, (org) => org.id)
+  @ManyToOne(() => Organization, (org) => org.id)
   organizationId: string;
 
-  @OneToMany(() => ThirdPartySystem, (tps) => tps.id)  
+  @ManyToOne(() => ThirdPartySystem, (tps) => tps.id)  
   thirdPartySystemId: string;
 
   @Column()
@@ -19,7 +19,7 @@ export class Connection {
   @Column()
   credentialsEncrypted: string;
 
-  @CreateDateColumn()
+  @Column()
   expiresAt: Date;
 
   @CreateDateColumn()
