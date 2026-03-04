@@ -10,7 +10,7 @@ import { OrganizationsModule } from './organizations/organizations.module';
 import Organization from './organizations/entities/organization.entity';
 import OrganizationUser from './organizations/entities/organization-users.entity';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './auth/roles.guard';
+import { AuthGuard } from './auth/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
