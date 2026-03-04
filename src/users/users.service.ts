@@ -9,15 +9,15 @@ import UpdateUserDto from './dtos/updateUser.dto';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersRepo: Repository<User>,
   ) {}
 
   async findAll() {
-    return this.usersRepository.find();
+    return this.usersRepo.find();
   }
 
   async findOneById(id: string) {
-    const user = await this.usersRepository.findOneBy({ id });
+    const user = await this.usersRepo.findOneBy({ id });
 
     if(!user) throw new NotFoundException("User not found");
 
@@ -25,7 +25,7 @@ export class UsersService {
   };
 
   async findOneByEmail(email: string) {
-    return await this.usersRepository.findOne({ 
+    return await this.usersRepo.findOne({ 
       where: { email },
       relations: [
         'organizationUsers',
@@ -35,9 +35,9 @@ export class UsersService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    const user = this.usersRepository.create(createUserDto);
+    const user = this.usersRepo.create(createUserDto);
     
-    const success = await this.usersRepository.save(user);
+    const success = await this.usersRepo.save(user);
     return success;
   };
 
@@ -47,7 +47,7 @@ export class UsersService {
     const user = await this.findOneById(id);
     if(!user) return null;
 
-    const result = await this.usersRepository.update({ id }, {
+    const result = await this.usersRepo.update({ id }, {
       firstName,
       lastName,
       email,
@@ -59,6 +59,6 @@ export class UsersService {
   };
 
   deleteUser(id: string) {
-    return this.usersRepository.delete({ id });
+    return this.usersRepo.delete({ id });
   };
 }
