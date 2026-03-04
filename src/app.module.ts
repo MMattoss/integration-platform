@@ -9,6 +9,9 @@ import { UsersModule } from './users/users.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import Organization from './organizations/entities/organization.entity';
 import OrganizationUser from './organizations/entities/organization-users.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/roles.guard';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -23,6 +26,7 @@ import OrganizationUser from './organizations/entities/organization-users.entity
       ],
       synchronize: true,
     }),
+    JwtModule,
     AuthModule,
     UsersModule,
     OrganizationsModule,
@@ -31,7 +35,11 @@ import OrganizationUser from './organizations/entities/organization-users.entity
     AppController
   ],
   providers: [
-    AppService
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    }
   ],
 })
 export class AppModule {}

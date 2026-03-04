@@ -1,4 +1,4 @@
-export enum OrganizationRole {
+export enum Role {
   OWNER = 'OWNER',
   ADMIN = 'ADMIN',
   MEMBER = 'MEMBER',

@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import User from 'src/users/user.entity';
 import Organization from './organization.entity';
-import { OrganizationRole } from '../enums/organizationRoles.enum';
+import { Role } from '../../auth/enums/organizationRoles.enum';
 
 @Entity('organization_users')
 @Unique(['user', 'organization'])
@@ -28,10 +28,10 @@ class OrganizationUser {
 
   @Column({
     type: 'enum',
-    enum: OrganizationRole,
-    default: OrganizationRole.MEMBER,
+    enum: Role,
+    default: Role.MEMBER,
   })
-  role: OrganizationRole;
+  role: Role;
 
   @CreateDateColumn()
   createdAt: Date;
