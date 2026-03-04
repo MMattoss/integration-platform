@@ -7,7 +7,7 @@ import { DataSource } from 'typeorm';
 import User from 'src/users/user.entity';
 import Organization from 'src/organizations/entities/organization.entity';
 import OrganizationUser from 'src/organizations/entities/organization-users.entity';
-import { OrganizationRole } from 'src/organizations/enums/organizationRoles.enum';
+import { Role } from 'src/auth/enums/organizationRoles.enum';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +29,7 @@ export class AuthService {
     if(existingUser) throw new ConflictException("Email already in use.");
 
     const hash = await bcrypt.hash(password, 10);
-    return this.dataSource.transaction(async (manager) => {
+    await this.dataSource.transaction(async (manager) => {
       const user = manager.create(User, {
         firstName,
         lastName,
@@ -46,12 +46,12 @@ export class AuthService {
       const membership = manager.create(OrganizationUser, {
         user,
         organization,
-        role: OrganizationRole.OWNER,
+        role: Role.OWNER,
       });
       await manager.save(membership);
 
-      return this.signIn(email, password);
     });
+    return this.signIn(email, password);
   }
 
   async signIn(email: string, password: string) {
@@ -63,11 +63,12 @@ export class AuthService {
 
     const membership = user.organizationUsers[0];
     if(!membership) throw new UnauthorizedException("User not assigned to any organization");
-    
+
     const payload = {
       sub: user.id,
       email: user.email,
-      organizationId: membership.organization.id
+      organizationId: membership.organization.id,
+      roles: membership.role,
     };
 
     return {
