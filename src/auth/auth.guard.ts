@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { CanActivate, ExecutionContext, Injectable, Redirect, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Observable } from 'rxjs';
 import { Role } from './enums/organizationRoles.enum';
 import { ROLES_KEY } from './decorators/currentUser.decorator';
-import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthUser } from './intefaces/authUser.interface';
 import { PUBLIC } from './decorators/public.decorator';
+import { RequestWithUser } from './intefaces/requestWithUser.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,39 +14,41 @@ export class AuthGuard implements CanActivate {
     private jwtService: JwtService, 
   ) {}
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    const publicRoute = this.reflector.getAllAndOverride<boolean>(PUBLIC, [
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC, [
       context.getHandler(),
       context.getClass(),
     ]);
+    if (isPublic) return true;
 
-    if(publicRoute) return true;
+    const request = context.switchToHttp().getRequest<RequestWithUser>();
+    const token = this.extractTokenFromHeader(request);
 
-    const request = context.switchToHttp().getRequest<Request>();
-    const authorization = request.headers.authorization;
-    const token = authorization && authorization.split(' ')[1];
+    if (!token) throw new UnauthorizedException('No token provided');
 
-    if(!token) throw new UnauthorizedException();
+    try {
+      const payload: AuthUser = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
 
-    const isTokenValid = this.jwtService.verify(token, { 
-      secret: process.env.JWT_SECRET
-    });
+      request['user'] = payload;
+      console.log(payload)
 
-    if(!isTokenValid) Redirect('/auth/login');
+      const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+        context.getHandler(),
+        context.getClass(),
+      ]);
 
-    const authUser: AuthUser = this.jwtService.decode(token);
-    
-    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+      if (!requiredRoles) return true;
 
-    if(!requiredRoles){
-      return true;
+      return requiredRoles.some((role) => payload.roles?.includes(role));
+    } catch {
+      throw new UnauthorizedException('Invalid or expired token');
     }
+  }
 
-    return requiredRoles.some(role => authUser.roles.includes(role));
+  private extractTokenFromHeader(request: RequestWithUser): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }
