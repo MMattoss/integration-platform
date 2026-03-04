@@ -16,6 +16,12 @@ import { ConnectionsModule } from './connections/connections.module';
 import { Connection } from './connections/entities/connection.entity';
 import { ThirdPartySystem } from './connections/entities/thirdPartySystem.entity';
 import { ExecutionsModule } from './executions/executions.module';
+import { ExecutionStep } from './executions/entities/executionStep.entity';
+import { EventLog } from './executions/entities/eventLog.entity';
+import { Workflow } from './workflows/entities/workflow.entity';
+import { WorkflowRun } from './workflows/entities/workflowRun.entity';
+import { WorkflowStep } from './workflows/entities/workflowStep.entity';
+import { WorkflowsModule } from './workflows/workflows.module';
 
 @Module({
   imports: [
@@ -29,6 +35,11 @@ import { ExecutionsModule } from './executions/executions.module';
         OrganizationUser,
         Connection,
         ThirdPartySystem,
+        ExecutionStep,
+        EventLog,
+        Workflow,
+        WorkflowRun,
+        WorkflowStep,
       ],
       synchronize: true,
     }),
@@ -39,6 +50,7 @@ import { ExecutionsModule } from './executions/executions.module';
     ConnectionsModule,
     ExecutionsModule,
     ExecutionsModule,
+    WorkflowsModule,
   ],
   controllers: [
     AppController
