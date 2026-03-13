@@ -5,17 +5,17 @@ import { Queue } from 'bullmq';
 @Controller('worker')
 export class WorkerController {
   constructor(
-    @InjectQueue('workflow') private workflowQueue: Queue,
+    @InjectQueue('workflow-execution') private workflowQueue: Queue,
   ) {}
 
-  @Post('execute-workflow')
+  @Post('workflow-execution')
   async startWorkflow(
     @Body() workflowId: string,
   ) {
-    await this.workflowQueue.add('execute-workflow', { workflowId });
+    await this.workflowQueue.add('workflow-execution', workflowId );
 
     return {
       message: 'Workflow executing'
-    }
+    }      
   }
 }

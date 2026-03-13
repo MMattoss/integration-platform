@@ -24,6 +24,7 @@ import { WorkflowStep } from './workflows/entities/workflowStep.entity';
 import { WorkflowsModule } from './workflows/workflows.module';
 import { BullModule } from '@nestjs/bullmq';
 import { WorkerModule } from './worker/worker.module';
+import { EncryptionModule } from './encryption/encryption.module';
 
 @Module({
   imports: [
@@ -48,13 +49,10 @@ import { WorkerModule } from './worker/worker.module';
     BullModule.forRoot({
       connection: {
         url: process.env.REDIS_URL,
-      },
-      defaultJobOptions: {
-        attempts: 3,
       }
     }),
     BullModule.registerQueue({
-      name: 'workflow',
+      name: 'workflow-execution',
     }),
     JwtModule,
     AuthModule,
@@ -64,6 +62,7 @@ import { WorkerModule } from './worker/worker.module';
     ExecutionsModule,
     WorkflowsModule,
     WorkerModule,
+    EncryptionModule,
   ],
   controllers: [
     AppController

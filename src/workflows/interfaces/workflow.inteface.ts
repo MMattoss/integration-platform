@@ -25,5 +25,7 @@ export interface RetryPolicy {
 
 export interface StepConfig {
   operationId: string;
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  path: string;
   mapping: Record<string, string>;
 }

@@ -1,7 +1,9 @@
+import { CredentialsType } from "../interfaces/connections.interface";
+
 export interface CreateConnectionDto {
   organizationId: string;
   thirdPartySystemId: string;
   name: string;
-  credentialsEncrypted: string;
+  credentials: CredentialsType;
   expiresAt: Date;
 }

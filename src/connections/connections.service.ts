@@ -4,16 +4,34 @@ import { Connection } from './entities/connection.entity';
 import { Repository } from 'typeorm';
 import { CreateConnectionDto } from './dtos/createConnection.dto';
 import { UpdateConnectionDto } from './dtos/updateConnection.dto';
+import { EncryptionService } from 'src/encryption/encryption.service';
 
 @Injectable()
 export class ConnectionsService {
   constructor(
     @InjectRepository(Connection)
     private connectionsRepo: Repository<Connection>,
+    private encryptionService: EncryptionService,
   ) {}
 
   async create(dto: CreateConnectionDto) {
-    const connection = this.connectionsRepo.create(dto);
+    const {
+      name,
+      organizationId,
+      thirdPartySystemId,
+      credentials,
+      expiresAt,
+    } = dto;
+    
+    const credentialsEncrypted = await this.encryptionService.encrypt(JSON.stringify(credentials));
+    const connection = this.connectionsRepo.create({
+      name,
+      organizationId,
+      thirdPartySystemId,
+      credentialsEncrypted,
+      expiresAt,
+    });
+
     return this.connectionsRepo.save(connection);
   }
 
