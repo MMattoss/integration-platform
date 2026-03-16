@@ -1,5 +1,5 @@
 import Organization from "src/organizations/entities/organization.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ThirdPartySystem } from "./thirdPartySystem.entity";
 
 @Entity()
@@ -10,7 +10,11 @@ export class Connection {
   @ManyToOne(() => Organization, (org) => org.id)
   organizationId: string;
 
-  @ManyToOne(() => ThirdPartySystem, (tps) => tps.id)  
+  @ManyToOne(() => ThirdPartySystem)  
+  @JoinColumn({ name: 'thirdPartySystemId' })
+  thirdPartySystem: ThirdPartySystem;
+
+  @Column()
   thirdPartySystemId: string;
 
   @Column()

@@ -66,10 +66,9 @@ export class WorkflowWorker extends WorkerHost {
                headers: {
                  'Authorization': `Bearer ${bearerToken}`,
                  'Content-Type': 'application/json',
-               }
+               },
              })
             );
-            console.log('res', result);
           } catch (err) {
             console.log(err);
           }
