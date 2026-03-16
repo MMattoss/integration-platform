@@ -1,6 +1,6 @@
 import { AuthType, ThirdPartyType } from "../enums/connections.enum";
 
-export interface CreateThirdPartySystemDto {
+export class CreateThirdPartySystemDto {
   name: string;
   type: ThirdPartyType;
   authType: AuthType;

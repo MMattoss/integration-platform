@@ -1,6 +1,6 @@
 import { CredentialsType } from "../interfaces/connections.interface";
 
-export interface CreateConnectionDto {
+export class CreateConnectionDto {
   organizationId: string;
   thirdPartySystemId: string;
   name: string;

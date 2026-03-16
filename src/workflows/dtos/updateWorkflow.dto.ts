@@ -1,3 +1,4 @@
+import { PartialType } from "@nestjs/mapped-types";
 import { CreateWorkflowDto } from "./createWorkflow.dto";
 
-export type UpdateWorkflowDto = Partial<CreateWorkflowDto>;
+export class UpdateWorkflowDto extends PartialType(CreateWorkflowDto) {}

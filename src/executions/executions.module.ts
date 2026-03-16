@@ -1,7 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ExecutionsService } from './executions.service';
+import { ExecutionStepsService } from './executions.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ExecutionStep } from './entities/executionStep.entity';
 
 @Module({
-  providers: [ExecutionsService]
+  imports: [
+    TypeOrmModule.forFeature([ExecutionStep]),
+  ],
+  providers: [ExecutionStepsService],
+  exports: [ExecutionStepsService],
 })
 export class ExecutionsModule {}

@@ -1,3 +1,4 @@
+import { PartialType } from "@nestjs/mapped-types";
 import { CreateThirdPartySystemDto } from "./createThirdPartySystem.dto";
 
-export type UpdateThirdPartySystemDto = Partial<CreateThirdPartySystemDto>
+export class UpdateThirdPartySystemDto extends PartialType(CreateThirdPartySystemDto) {}

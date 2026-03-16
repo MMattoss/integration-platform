@@ -40,8 +40,7 @@ export class WorkflowWorker extends WorkerHost {
     //   workflowId: workflow.id,
     //   status: WorkflowStatus.ACTIVE,
     // });
-
-    const context = {}
+    const context: { steps: Record<string,any>} = { steps: {} };
 
     for(const step of workflowSteps) {
       if (!step.connectionId) continue;
@@ -50,7 +49,6 @@ export class WorkflowWorker extends WorkerHost {
       const decryptedCredentials = await this.encryptionService.decrypt(connection.credentialsEncrypted);
       const credentials = JSON.parse(decryptedCredentials) as CredentialsType;
       
-
       // 5. Execute
       switch (credentials.type) {
         case AuthType.OAUTH2: {
@@ -59,24 +57,24 @@ export class WorkflowWorker extends WorkerHost {
           const bearerToken = credentials.accessToken;
 
           try {
-            const result = await firstValueFrom(
+            const res = await firstValueFrom(
               this.httpService.request({
-               method,
-               baseURL: `${url}${step.configJson.path}`,
-               headers: {
-                 'Authorization': `Bearer ${bearerToken}`,
-                 'Content-Type': 'application/json',
-               },
-             })
+                method,
+                url: `${url}${step.configJson.path}`,
+                headers: {
+                  Authorization: `Bearer ${bearerToken}`,
+                  'Content-Type': 'application/json',
+                },
+              }),
             );
+
+            context.steps[step.id] = res.data as Record<string,any>;
+            console.log(context.steps[step.id]);
           } catch (err) {
-            console.log(err);
+            console.error(err);
+          } finally {
+            // log result
           }
-
-
-          // 4.1. Create executionRun
-          // 4.2. Log output
-          break;
         }
         case AuthType.API_KEY: {
 
@@ -91,6 +89,6 @@ export class WorkflowWorker extends WorkerHost {
       
     }
     
-    // await this.workflowRunService.update(workflowRun.id, { finishedAt: new Date()})
+    // await this.workflowRunService.update(workflowRun.id, { finishedAt: new Date() });
   }
 }

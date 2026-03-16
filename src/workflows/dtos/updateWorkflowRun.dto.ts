@@ -1,6 +1,6 @@
 import { WorkflowStatus } from "../enums/workflow.enum";
 
-export interface UpdateWorkflowRunDto  {
+export class UpdateWorkflowRunDto  {
   status?: WorkflowStatus;
   finishedAt?: Date;
 }

@@ -1,6 +1,6 @@
 import { WorkflowStatus } from "../enums/workflow.enum";
 
-export interface CreateWorkFlowRunDto {
+export class CreateWorkFlowRunDto {
   workflowId: string;
   status: WorkflowStatus;
 }
