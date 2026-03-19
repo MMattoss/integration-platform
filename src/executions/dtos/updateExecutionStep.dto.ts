@@ -1,4 +1,8 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateExecutionStepDto } from './createExecutionStep.dto';
+import { ExecutionStatus } from '../enums/executions.enum';
+import { StepDataEnvelope } from '../interfaces/execution.inteface';
 
-export class UpdateExecutionStepDto extends PartialType(CreateExecutionStepDto) {}
+export class UpdateExecutionStepDto {
+  status?: ExecutionStatus;
+  finishedAt?: Date;
+  output?: StepDataEnvelope;
+}

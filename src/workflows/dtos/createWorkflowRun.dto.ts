@@ -1,6 +1,7 @@
-import { WorkflowStatus } from "../enums/workflow.enum";
+import { WorkflowRunStatus } from "../enums/workflow.enum";
 
 export class CreateWorkFlowRunDto {
   workflowId: string;
-  status: WorkflowStatus;
+  status: WorkflowRunStatus;
+  startedAt: Date;
 }

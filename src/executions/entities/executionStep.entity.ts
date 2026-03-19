@@ -6,19 +6,19 @@ import type { StepDataEnvelope } from "../interfaces/execution.inteface";
 
 @Entity()
 export class ExecutionStep {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(() => WorkflowRun)
   @JoinColumn({ name: 'workflowRunId' })
-  workflowRun: string;
+  workflowRun: WorkflowRun;
 
   @Column()
   workflowRunId: string;
 
   @ManyToOne(() => WorkflowStep)
   @JoinColumn({ name:'workflowStepId' })
-  workflowStep: string;
+  workflowStep: WorkflowStep;
   
   @Column()
   workflowStepId: string;

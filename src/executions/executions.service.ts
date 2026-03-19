@@ -1,63 +1,44 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ExecutionStep } from './entities/executionStep.entity'; 
 import { CreateExecutionStepDto } from './dtos/createExecutionStep.dto'; 
 import { UpdateExecutionStepDto } from './dtos/updateExecutionStep.dto'; 
 
 @Injectable()
-export class ExecutionStepsService {
+export class ExecutionStepService {
   constructor(
     @InjectRepository(ExecutionStep)
-    private executionStepsRepo: Repository<ExecutionStep>,
+    private readonly repo: Repository<ExecutionStep>,
   ) {}
 
   async create(dto: CreateExecutionStepDto): Promise<ExecutionStep> {
-    const executionStep = this.executionStepsRepo.create(dto);
-    return this.executionStepsRepo.save(executionStep);
-  }
-
-  async findByWorkflowRun(workflowRunId: string) {
-    return this.executionStepsRepo.find({
-      where: { workflowRunId },
-      order: { startedAt: 'ASC' },
+    const step = this.repo.create({
+      workflowRunId: dto.workflowRunId,
+      workflowStepId: dto.workflowStepId,
+      status: dto.status,
+      startedAt: dto.startedAt,
+      input: dto.input,
+      output: dto.output,
     });
-  }
-
-  async findAll(where?: FindOptionsWhere<ExecutionStep>): Promise<ExecutionStep[]> {
-    return this.executionStepsRepo.find({
-      where,
-      order: {
-        startedAt: 'ASC',
-      },
-    });
-  }
-
-  async findOneById(id: string): Promise<ExecutionStep> {
-    const executionStep = await this.executionStepsRepo.findOne({
-      where: { id },
-    });
-
-    if (!executionStep) {
-      throw new NotFoundException('ExecutionStep not found');
-    }
-
-    return executionStep;
+    return this.repo.save(step);
   }
 
   async update(id: string, dto: UpdateExecutionStepDto): Promise<ExecutionStep> {
-    const executionStep = await this.findOneById(id);
-
-    Object.assign(executionStep, dto);
-
-    return this.executionStepsRepo.save(executionStep);
+    await this.repo.update(id, dto);
+    return this.findOne(id);
   }
 
-  async delete(id: string): Promise<void> {
-    const result = await this.executionStepsRepo.delete({ id });
+  async findOne(id: string): Promise<ExecutionStep> {
+    const step = await this.repo.findOne({ where: { id } });
+    if (!step) throw new NotFoundException(`ExecutionStep ${id} not found`);
+    return step;
+  }
 
-    if (result.affected === 0) {
-      throw new NotFoundException('ExecutionStep not found');
-    }
+  async findAllByWorkflowRunId(workflowRunId: string): Promise<ExecutionStep[]> {
+    return this.repo.find({
+      where: { workflowRunId },
+      order: { startedAt: 'ASC' },
+    });
   }
 }

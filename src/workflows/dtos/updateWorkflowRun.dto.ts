@@ -1,6 +1,6 @@
-import { WorkflowStatus } from "../enums/workflow.enum";
+import { WorkflowRunStatus } from "../enums/workflow.enum";
 
 export class UpdateWorkflowRunDto  {
-  status?: WorkflowStatus;
+  status?: WorkflowRunStatus;
   finishedAt?: Date;
 }

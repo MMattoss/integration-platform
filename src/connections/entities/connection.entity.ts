@@ -4,10 +4,14 @@ import { ThirdPartySystem } from "./thirdPartySystem.entity";
 
 @Entity()
 export class Connection {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Organization, (org) => org.id)
+  @ManyToOne(() => Organization)
+  @JoinColumn({ name: 'organizationId' })
+  organization: Organization;
+
+  @Column()
   organizationId: string;
 
   @ManyToOne(() => ThirdPartySystem)  

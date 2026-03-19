@@ -6,7 +6,7 @@ import type { RetryPolicy, StepConfig } from "../interfaces/workflow.inteface";
 
 @Entity()
 export class WorkflowStep {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(() => Workflow)
