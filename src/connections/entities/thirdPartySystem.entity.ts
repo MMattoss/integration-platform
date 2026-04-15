@@ -1,0 +1,23 @@
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { AuthType, ThirdPartyType } from "../enums/connections.enum";
+
+@Entity()
+export class ThirdPartySystem {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+
+  @Column({ type: 'enum', enum: ThirdPartyType })
+  type: ThirdPartyType;
+
+  @Column({ type: 'enum', enum: AuthType })
+  authType: AuthType;
+
+  @Column()
+  baseUrl: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+}
