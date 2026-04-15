@@ -15,6 +15,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConnectionsModule } from './connections/connections.module';
 import { Connection } from './connections/entities/connection.entity';
 import { ThirdPartySystem } from './connections/entities/thirdPartySystem.entity';
+import { ExecutionsModule } from './executions/executions.module';
 
 @Module({
   imports: [
@@ -36,6 +37,8 @@ import { ThirdPartySystem } from './connections/entities/thirdPartySystem.entity
     UsersModule,
     OrganizationsModule,
     ConnectionsModule,
+    ExecutionsModule,
+    ExecutionsModule,
   ],
   controllers: [
     AppController
