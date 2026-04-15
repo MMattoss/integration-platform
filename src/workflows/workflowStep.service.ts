@@ -19,6 +19,19 @@ export class WorkflowStepService {
     return this.workflowStepsRepo.save(workflowStep);
   }
 
+  async findAllByWorkflowId(workflowId: string) {
+    const workflowStep = await this.workflowStepsRepo.find({
+      where: { workflowId },
+      order: { order: 'ASC' },
+    });
+
+    if(!workflowStep) {
+      throw new NotFoundException('Workflow step not found');
+    }
+
+    return workflowStep;
+  }
+
   async findOne(id: string) {
     const workflowStep = await this.workflowStepsRepo.findOne({ where: { id } });
 

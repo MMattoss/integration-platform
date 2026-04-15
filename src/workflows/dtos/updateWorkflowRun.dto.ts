@@ -1,3 +1,6 @@
-import { CreateWorkFlowRunDto } from "./createWorkflowRun.dto";
+import { WorkflowRunStatus } from "../enums/workflow.enum";
 
-export type UpdateWorkflowRunDto = Partial<CreateWorkFlowRunDto>;
+export class UpdateWorkflowRunDto  {
+  status?: WorkflowRunStatus;
+  finishedAt?: Date;
+}

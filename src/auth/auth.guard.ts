@@ -32,7 +32,6 @@ export class AuthGuard implements CanActivate {
       });
 
       request['user'] = payload;
-      console.log(payload)
 
       const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
         context.getHandler(),

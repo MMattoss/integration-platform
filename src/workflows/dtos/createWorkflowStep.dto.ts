@@ -1,7 +1,7 @@
 import { StepType } from "../enums/workflow.enum";
 import { RetryPolicy, StepConfig } from "../interfaces/workflow.inteface";
 
-export interface CreateWorkflowStepDto {
+export class CreateWorkflowStepDto {
   workflowId: string;
   connectionId: string;
   type: StepType;

@@ -1,14 +1,18 @@
 import Organization from "src/organizations/entities/organization.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { TriggerType, WorkflowStatus } from "../enums/workflow.enum";
 import type { TriggerConfig } from "../interfaces/workflow.inteface";
 
 @Entity()
 export class Workflow {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Organization, (org) => org.id)
+  @ManyToOne(() => Organization)
+  @JoinColumn({ name: 'organizationId' })
+  organization: Organization;
+
+  @Column()
   organizationId: string;
 
   @Column()

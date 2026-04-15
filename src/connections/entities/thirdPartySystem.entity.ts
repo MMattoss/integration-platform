@@ -3,7 +3,7 @@ import { AuthType, ThirdPartyType } from "../enums/connections.enum";
 
 @Entity()
 export class ThirdPartySystem {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()

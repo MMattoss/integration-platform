@@ -4,6 +4,12 @@ export enum WorkflowStatus {
   PAUSED = 'PAUSED',
 }
 
+export enum WorkflowRunStatus {
+  RUNNING = 'RUNNING',
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED',
+}
+
 export enum TriggerType {
   WEBHOOK = 'WEBHOOK',
   SCHEDULE = 'SCHEDULE',

@@ -1,3 +1,4 @@
+import { PartialType } from "@nestjs/mapped-types";
 import { CreateConnectionDto } from "./createConnection.dto";
 
-export type UpdateConnectionDto = Partial<CreateConnectionDto>;
+export class UpdateConnectionDto extends PartialType(CreateConnectionDto) {}
