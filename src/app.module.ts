@@ -12,6 +12,9 @@ import OrganizationUser from './organizations/entities/organization-users.entity
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { ConnectionsModule } from './connections/connections.module';
+import { Connection } from './connections/entities/connection.entity';
+import { ThirdPartySystem } from './connections/entities/thirdPartySystem.entity';
 
 @Module({
   imports: [
@@ -23,6 +26,8 @@ import { JwtModule } from '@nestjs/jwt';
         User, 
         Organization,
         OrganizationUser,
+        Connection,
+        ThirdPartySystem,
       ],
       synchronize: true,
     }),
@@ -30,6 +35,7 @@ import { JwtModule } from '@nestjs/jwt';
     AuthModule,
     UsersModule,
     OrganizationsModule,
+    ConnectionsModule,
   ],
   controllers: [
     AppController
