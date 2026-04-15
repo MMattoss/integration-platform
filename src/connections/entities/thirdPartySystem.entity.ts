@@ -3,16 +3,16 @@ import { AuthType, ThirdPartyType } from "../enums/connections.enum";
 
 @Entity()
 export class ThirdPartySystem {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: ThirdPartyType })
   type: ThirdPartyType;
 
-  @Column()
+  @Column({ type: 'enum', enum: AuthType })
   authType: AuthType;
 
   @Column()

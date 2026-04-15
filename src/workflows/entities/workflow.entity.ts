@@ -1,9 +1,10 @@
 import Organization from "src/organizations/entities/organization.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { ThirdPartySystem } from "./thirdPartySystem.entity";
+import { TriggerType, WorkflowStatus } from "../enums/workflow.enum";
+import type { TriggerConfig } from "../interfaces/workflow.inteface";
 
 @Entity()
-export class Connection {
+export class Workflow {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -14,21 +15,17 @@ export class Connection {
   @Column()
   organizationId: string;
 
-  @ManyToOne(() => ThirdPartySystem)  
-  @JoinColumn({ name: 'thirdPartySystemId' })
-  thirdPartySystem: ThirdPartySystem;
-
-  @Column()
-  thirdPartySystemId: string;
-
   @Column()
   name: string;
 
-  @Column()
-  credentialsEncrypted: string;
+  @Column({ type: 'enum', enum: WorkflowStatus })
+  status: WorkflowStatus;
 
-  @Column()
-  expiresAt: Date;
+  @Column({ type: 'enum', enum: TriggerType })
+  triggerType: TriggerType;
+
+  @Column({ type: 'jsonb' })
+  triggerConfig: TriggerConfig;
 
   @CreateDateColumn()
   createdAt: Date;
